@@ -1,6 +1,6 @@
 {
   "name": "@leukode-labs/system-commander",
-  "version": "0.2.51",
+  "version": "0.2.52",
   "description": "MCP server for terminal operations and file editing",
   "mcpName": "io.github.leukode-labs/system-commander",
   "license": "MIT",
