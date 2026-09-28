@@ -1,0 +1,56 @@
+/* Mobile refinement */
+@media (max-width:480px){
+  .cursor-glow{display:none}
+  .site-header{padding:13px 14px}
+  .brand{gap:8px;font-size:12px}
+  .brand img{width:23px;height:23px}
+  .header-cta{padding:8px 10px;font-size:10px}
+  .hero{padding-top:128px;padding-bottom:78px;gap:34px}
+  .hero-copy{padding-top:20px}
+  .hero h1{font-size:clamp(50px,17vw,78px);letter-spacing:-.08em}
+  .hero-lede{font-size:14px;line-height:1.65;margin-top:24px}
+  .hero-actions{margin-top:26px;gap:8px}
+  .button{padding:11px 14px;font-size:11px}
+  .hero-stage{padding-top:0}
+  .glass-frame{border-radius:15px;transform:none;animation:none}
+  .command-scene{padding:18px 14px 17px}
+  .prompt{font-size:16px;line-height:1.45;margin-top:10px}
+  .sequence{gap:6px}
+  .sequence-row{grid-template-columns:22px minmax(0,1fr) 18px;gap:7px;padding:9px 8px}
+  .sequence-row em{display:none}
+  .sequence-row b{font-size:10px}
+  .scene-foot{margin-top:20px;font-size:7px;gap:10px}
+  .scene-foot span:last-child{text-align:right}
+  .stage-caption{margin-top:10px;font-size:7px}
+  .orbit-a{width:330px;height:330px;right:-150px;top:95px}
+  .orbit-b{width:220px;height:220px;right:-50px;top:150px}
+  .statement{padding-top:72px;padding-bottom:105px}
+  .statement h2{font-size:clamp(37px,11.5vw,54px)}
+  .statement p:last-child{font-size:14px;line-height:1.7;margin-top:22px}
+  .capabilities{padding-bottom:105px}
+  .section-heading{margin-bottom:34px}
+  .section-heading h2{font-size:clamp(42px,12vw,58px)}
+  .cap-grid{gap:10px}
+  .cap-card,.cap-card.wide{min-height:280px;padding:20px;border-radius:15px}
+  .cap-card h3{margin-top:27px;font-size:25px}
+  .cap-card p{font-size:13px;line-height:1.65}
+  .cap-visual{left:20px;right:20px;bottom:20px}
+  .network-visual{height:150px;margin-top:22px}
+  .node{width:52px;height:52px;font-size:10px}
+  .remote{padding-top:70px;padding-bottom:105px}
+  .remote-content,.architecture{padding-left:16px;padding-right:16px}
+  .remote-content h2{font-size:clamp(46px,13vw,64px)}
+  .remote-lede{font-size:14px;line-height:1.7;margin-top:22px}
+  .architecture{margin-top:46px;gap:7px}
+  .arch-card{min-height:175px;padding:19px;border-radius:15px}
+  .arch-title{font-size:22px;margin-top:38px}
+  .arch-card p{font-size:12px}
+  .arch-arrow{font-size:18px}
+  .github{padding-top:0;padding-bottom:70px}
+  .github-panel{padding:46px 0;gap:25px}
+  .github-panel h2{font-size:clamp(38px,11vw,52px)}
+  .github-panel p{font-size:13px}
+  .github-link{width:100%;padding:13px 14px}
+  .github-mark{width:36px;height:36px}
+  .site-footer{font-size:8px;flex-wrap:wrap;padding-top:20px}
+}

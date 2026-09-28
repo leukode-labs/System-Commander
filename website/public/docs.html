@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07080b" />
+    <meta name="description" content="System Commander documentation: install, connect, use, reset, and troubleshoot your computer connection." />
+    <title>System Commander — Documentation</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <div class="cursor-glow"></div>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="System Commander home">
+        <img src="/logo.png" alt="" />
+        <span>System Commander</span>
+      </a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/#capabilities">Capabilities</a>
+        <a href="/#remote">Remote MCP</a>
+        <a href="/docs.html">Documentation</a>
+        <a href="/#github">GitHub</a>
+      </nav>
+      <a class="header-cta" href="https://system-commander-cloud-production.up.railway.app/" target="_blank" rel="noreferrer">
+        Open Cloud
+        <span>↗</span>
+      </a>
+    </header>
+    <main class="docs-page">
+      <section class="docs-hero">
+        <div class="reveal">
+          <p class="eyebrow">System Commander / Documentation</p>
+          <h1>Install it.<br /><span>Connect it. Control it.</span></h1>
+          <p class="docs-lede">
+            Everything needed to connect a computer to System Commander Cloud, attach an MCP client,
+            rotate a credential, or completely remove the local device credential.
+          </p>
+          <div class="setup-meta">
+            <span class="setup-pill">Windows · macOS · Linux</span>
+            <span class="setup-pill">Remote MCP</span>
+            <span class="setup-pill">Self-hostable agent</span>
+          </div>
+          <a class="setup-cloud" href="https://system-commander-cloud-production.up.railway.app/" target="_blank" rel="noreferrer">
+            Open System Commander Cloud <span>↗</span>
+          </a>
+        </div>
+      </section>
+      <div class="docs-shell">
+        <aside class="docs-index">
+          <div class="docs-index-title">On this page</div>
+          <a href="#quickstart">Quick start</a>
+          <a href="#mcp">MCP connection</a>
+          <a href="#reset">Remove local credentials</a>
+          <a href="#rotate">Rotate a device token</a>
+          <a href="#troubleshooting">Troubleshooting</a>
+        </aside>
+        <div class="docs-content">
+          <section class="docs-section reveal" id="quickstart">
+            <p class="docs-kicker">01 / Quick start</p>
+            <h2>Connect a computer</h2>
+            <p>
+              A System Commander setup has two separate credentials: a private device credential
+              between your computer and System Commander Cloud, and an OAuth session used by your AI client.
+              Keep those two paths separate.
+            </p>
+            <div class="docs-step">
+              <div class="docs-step-number">01</div>
+              <div>
+                <h3>Create a device registration</h3>
+                <p>Open System Commander Cloud, sign in, and add a computer from your dashboard.</p>
+              </div>
+            </div>
+            <div class="docs-step">
+              <div class="docs-step-number">02</div>
+              <div>
+                <h3>Run the generated command</h3>
+                <p>Cloud gives you the exact pairing command for that computer. Do not edit the device ID or token.</p>
+                <div class="docs-code">
+                  <div class="docs-code-head"><span>Example</span><button class="docs-copy" data-copy-target="pair-command">Copy</button></div>
+                  <code id="pair-command">npx @leukode-labs/system-commander@latest remote --relay https://system-commander-cloud-production.up.railway.app --device-id YOUR_DEVICE_ID --token YOUR_DEVICE_TOKEN</code>
+                </div>
+              </div>
+            </div>
+            <div class="docs-step">
+              <div class="docs-step-number">03</div>
+              <div>
+                <h3>Leave the agent running</h3>
+                <p>When the terminal reports that the local engine is ready and the device is connected, the computer is available to your authenticated MCP clients.</p>
+              </div>
+            </div>
+          </section>
+          <section class="docs-section reveal" id="mcp">
+            <p class="docs-kicker">02 / MCP</p>
+            <h2>Connect Claude or another MCP client</h2>
+            <p>
+              Your dashboard is the permanent place to retrieve the MCP URL for each computer.
+              The URL identifies the device; the private device token is never the MCP credential.
+            </p>
+            <div class="docs-callout">
+              <strong>MCP URL</strong>
+              <span>Open your System Commander dashboard, find the computer, and copy its MCP connection URL whenever you need it.</span>
+            </div>
+            <div class="docs-step">
+              <div class="docs-step-number">01</div>
+              <div>
+                <h3>Copy the MCP URL from the dashboard</h3>
+                <p>Use the computer card's <strong>Copy MCP URL</strong> action. It stays the same when you rotate the device token.</p>
+              </div>
+            </div>
+            <div class="docs-step">
+              <div class="docs-step-number">02</div>
+              <div>
+                <h3>Add it to your MCP client</h3>
+                <p>For Claude, use its custom connector flow and provide the MCP URL. Claude handles the OAuth authentication step with System Commander Cloud.</p>
+              </div>
+            </div>
+            <div class="docs-step">
+              <div class="docs-step-number">03</div>
+              <div>
+                <h3>Test with a harmless request</h3>
+                <p>Ask the AI to perform a read-only operation first, such as listing a directory or checking the current working directory.</p>
+              </div>
+            </div>
+          </section>
+          <section class="docs-section docs-danger reveal" id="reset">
+            <p class="docs-kicker">03 / Local reset</p>
+            <h2>Remove the saved device credential</h2>
+            <p>
+              Use this when you want to completely remove the locally saved System Commander device ID and token
+              from a computer before starting over. Stop the running remote agent first.
+            </p>
+            <div class="docs-callout warning">
+              <strong>Important</strong>
+              <span>This removes the credential saved on the computer. It does not revoke the cloud-side device record. Revoke the device from your System Commander dashboard when you also want to invalidate the cloud registration.</span>
+            </div>
+            <div class="docs-command-grid">
+              <article class="docs-command-card">
+                <div class="docs-command-head"><span>Windows · PowerShell</span><button class="docs-copy" data-copy-target="remove-win">Copy</button></div>
+                <code id="remove-win">Remove-Item -Recurse -Force "$HOME\.system-commander-device"</code>
+              </article>
+              <article class="docs-command-card">
+                <div class="docs-command-head"><span>Windows · Command Prompt</span><button class="docs-copy" data-copy-target="remove-cmd">Copy</button></div>
+                <code id="remove-cmd">rmdir /s /q "%USERPROFILE%\.system-commander-device"</code>
+              </article>
+              <article class="docs-command-card">
+                <div class="docs-command-head"><span>macOS · Linux</span><button class="docs-copy" data-copy-target="remove-unix">Copy</button></div>
+                <code id="remove-unix">rm -rf "$HOME/.system-commander-device"</code>
+              </article>
+            </div>
+            <p class="docs-note">
+              After removing the local credential, create a fresh registration in Cloud and run the new generated command.
+              Do not reuse an old token from an earlier setup.
+            </p>
+          </section>
+          <section class="docs-section reveal" id="rotate">
+            <p class="docs-kicker">04 / Credentials</p>
+            <h2>Rotate a device token</h2>
+            <p>
+              Token rotation keeps the device ID and MCP URL stable while replacing the private computer-to-cloud credential.
+              Use your dashboard to generate a fresh token when the existing token is suspected to be stale or exposed.
+            </p>
+            <div class="docs-callout">
+              <strong>After rotation</strong>
+              <span>The existing agent session is closed. Run the newly generated pairing command on the computer. Your MCP URL does not need to change.</span>
+            </div>
+          </section>
+          <section class="docs-section reveal" id="troubleshooting">
+            <p class="docs-kicker">05 / Troubleshooting</p>
+            <h2>Common connection errors</h2>
+            <div class="docs-troubles">
+              <article><strong>DEVICE_NOT_REGISTERED</strong><span>The device ID is not present in the Cloud account. Create a fresh device registration and use the new command.</span></article>
+              <article><strong>TOKEN_INVALID</strong><span>The local token does not match the cloud record. Generate a fresh token and run the exact command Cloud provides.</span></article>
+              <article><strong>TOKEN_EXPIRED</strong><span>The device credential reached its expiry time. Rotate the token and reconnect the agent.</span></article>
+              <article><strong>Cloud connection failed</strong><span>Verify internet access and keep the relay URL exactly as supplied by System Commander Cloud.</span></article>
+            </div>
+            <div class="docs-ai">
+              <div>
+                <p class="eyebrow">AI setup prompt</p>
+                <h3>Let your AI guide the setup</h3>
+                <p>Use the prompt below with ChatGPT or Claude. It tells the AI to use current credentials and diagnose exact errors rather than reviving stale ones.</p>
+              </div>
+              <div class="docs-prompt-wrap">
+                <textarea id="docsPrompt" class="setup-prompt" readonly>You are helping me set up System Commander on my own computer.
+
+System Commander Cloud:
+https://system-commander-cloud-production.up.railway.app/
+
+Guide me through setup carefully.
+1. Ask whether I am using Windows, macOS, or Linux and which AI client I use.
+2. Have me sign in to System Commander Cloud and create or select the current computer registration.
+3. Tell me to use the exact pairing command generated by Cloud.
+4. Never invent or modify my device ID or device token.
+5. Never ask me to reuse an old device token.
+6. If I see DEVICE_NOT_REGISTERED, have me create a fresh registration.
+7. If I see TOKEN_INVALID or TOKEN_EXPIRED, have me rotate the token and rerun the current command.
+8. Never ask me to paste my private device token publicly.
+9. Once the computer is connected, guide me through the current MCP connection flow for my AI client using the MCP URL shown in the System Commander dashboard.
+10. Finish only after I confirm a harmless test operation works.</textarea>
+                <button class="copy-button" id="copyDocsPrompt" type="button">Copy AI setup prompt <span>⧉</span></button>
+              </div>
+            </div>
+          </section>
+          <section class="setup-footer-cta reveal">
+            <p class="eyebrow">Need a fresh start?</p>
+            <h2>Remove locally.<br /><span>Re-register cleanly.</span></h2>
+            <p>
+              Stop the agent, remove the saved local credential, create a fresh Cloud registration,
+              and run the new pairing command.
+            </p>
+            <a class="button button-primary" href="https://system-commander-cloud-production.up.railway.app/" target="_blank" rel="noreferrer">
+              Open System Commander Cloud <span>↗</span>
+            </a>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-main">
+        <a class="footer-brand" href="/" aria-label="System Commander home">
+          <img src="/logo.png" alt="" />
+          <span>System Commander</span>
+        </a>
+        <p class="footer-note">AI control for your computer</p>
+        <div class="footer-links">
+          <a href="/docs.html">Documentation</a>
+          <a href="https://github.com/leukode-labs/System-Commander" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Leukode Labs</span>
+        <span>System Commander</span>
+      </div>
+    </footer>
+    <script type="module" src="/docs.js"></script>
+  </body>
+</html>

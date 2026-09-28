@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07080b" />
+    <meta name="description" content="System Commander gives AI a way to act on your computer." />
+    <title>System Commander — Give AI a way to act.</title>
+    <link rel="icon" href="/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/mobile.css" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <div class="cursor-glow"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="System Commander home">
+        <img src="/logo.png" alt="" />
+        <span>System Commander</span>
+      </a>
+      <nav class="nav">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#remote">Remote MCP</a>
+        <a href="#github">GitHub</a>
+      </nav>
+      <a class="header-cta" href="https://github.com/leukode-labs/System-Commander" target="_blank" rel="noreferrer">
+        View repository
+        <span>↗</span>
+      </a>
+    </header>
+
+    <main id="top">
+      <section class="hero section">
+        <div class="hero-orbit orbit-a"></div>
+        <div class="hero-orbit orbit-b"></div>
+        <div class="hero-grid"></div>
+
+        <div class="hero-copy reveal">
+          <p class="eyebrow">AI control for your computer</p>
+          <h1>Give AI<br /><span>a way to act.</span></h1>
+          <p class="hero-lede">
+            System Commander turns natural-language intent into real computer actions —
+            files, terminal, processes, code, and remote machines.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#remote">See how it works <span>↓</span></a>
+            <a class="button button-ghost" href="https://github.com/leukode-labs/System-Commander" target="_blank" rel="noreferrer">Explore GitHub <span>↗</span></a>
+          </div>
+        </div>
+
+        <div class="hero-stage reveal delay-1">
+          <div class="glass-frame">
+            <div class="frame-top">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="frame-title">SYSTEM COMMANDER / LIVE</div>
+              <div class="frame-status"><span></span> connected</div>
+            </div>
+            <div class="command-scene">
+              <div class="scene-label">AI intent</div>
+              <div class="prompt">“Find the process using too much memory,<br />stop it, and tell me what happened.”</div>
+              <div class="scene-line"></div>
+              <div class="sequence">
+                <div class="sequence-row"><span>01</span><b>discover</b><em>processes</em><strong>✓</strong></div>
+                <div class="sequence-row"><span>02</span><b>inspect</b><em>memory pressure</em><strong>✓</strong></div>
+                <div class="sequence-row"><span>03</span><b>act</b><em>terminate process</em><strong>✓</strong></div>
+                <div class="sequence-row active"><span>04</span><b>verify</b><em>system recovered</em><strong>→</strong></div>
+              </div>
+              <div class="scene-foot">
+                <span>local authority</span>
+                <span>secure execution boundary</span>
+              </div>
+            </div>
+          </div>
+          <div class="stage-caption">
+            <span>Conversation</span>
+            <div class="caption-line"></div>
+            <span>Execution</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="statement section">
+        <div class="statement-inner reveal">
+          <p class="eyebrow">The missing layer</p>
+          <h2>Most AI can explain.<br /><span>System Commander can do.</span></h2>
+          <p>
+            Your AI already understands the request. System Commander gives that understanding
+            a controlled path to the machine itself.
+          </p>
+        </div>
+      </section>
+
+      <section class="capabilities section" id="capabilities">
+        <div class="section-heading reveal">
+          <p class="eyebrow">What it unlocks</p>
+          <h2>One interface.<br />Your whole machine.</h2>
+        </div>
+
+        <div class="cap-grid">
+          <article class="cap-card reveal">
+            <div class="cap-index">01</div>
+            <h3>Files</h3>
+            <p>Read, write, search, move, inspect, and surgically edit what matters.</p>
+            <div class="cap-visual file-visual"><span></span><span></span><span></span><span></span></div>
+          </article>
+          <article class="cap-card reveal delay-1">
+            <div class="cap-index">02</div>
+            <h3>Terminal</h3>
+            <p>Run commands, stream output, and keep work moving in the background.</p>
+            <div class="cap-visual terminal-visual"><code>$ system-commander</code><i></i></div>
+          </article>
+          <article class="cap-card reveal delay-2">
+            <div class="cap-index">03</div>
+            <h3>Processes</h3>
+            <p>Inspect what is running, interact with it, and stop what should not be there.</p>
+            <div class="cap-visual process-visual"><b></b><b></b><b></b><b></b><b></b></div>
+          </article>
+          <article class="cap-card reveal">
+            <div class="cap-index">04</div>
+            <h3>Code</h3>
+            <p>Make precise changes without forcing an entire file to be rewritten.</p>
+            <div class="cap-visual code-visual"><span></span><span></span><span></span></div>
+          </article>
+          <article class="cap-card wide reveal delay-1">
+            <div>
+              <div class="cap-index">05</div>
+              <h3>Remote MCP</h3>
+              <p>Your AI does not have to sit next to the computer. System Commander Cloud securely routes MCP requests to a connected machine.</p>
+            </div>
+            <div class="network-visual">
+              <div class="node node-ai">AI</div>
+              <div class="link link-one"></div>
+              <div class="node node-cloud">SC</div>
+              <div class="link link-two"></div>
+              <div class="node node-device">PC</div>
+              <div class="pulse"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="remote section" id="remote">
+        <div class="remote-backdrop"></div>
+        <div class="remote-content reveal">
+          <p class="eyebrow">System Commander Cloud</p>
+          <h2>One connection.<br /><span>Any machine.</span></h2>
+          <p class="remote-lede">
+            Authenticate the user, connect a device, and let the cloud act as the bridge —
+            while the connected computer remains the authority for execution.
+          </p>
+        </div>
+
+        <div class="architecture reveal delay-1">
+          <div class="arch-card">
+            <div class="arch-label">01 / AI CLIENT</div>
+            <div class="arch-title">Intent</div>
+            <p>MCP request over authenticated HTTPS.</p>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-card accent">
+            <div class="arch-label">02 / CLOUD</div>
+            <div class="arch-title">System Commander</div>
+            <p>Secure relay routes the request to one connected device.</p>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-card">
+            <div class="arch-label">03 / DEVICE</div>
+            <div class="arch-title">Execution</div>
+            <p>Local agent performs the operation with OS-level authority.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="github section" id="github">
+        <div class="github-panel reveal">
+          <div>
+            <p class="eyebrow">Open source, built in the open</p>
+            <h2>The machine-control layer<br />is yours to inspect.</h2>
+            <p>
+              Follow the implementation, read the architecture, open issues, and build on top of it.
+            </p>
+          </div>
+          <a class="github-link" href="https://github.com/leukode-labs/System-Commander" target="_blank" rel="noreferrer">
+            <span class="github-mark">↗</span>
+            <span>
+              <small>github.com/leukode-labs</small>
+              <strong>System-Commander</strong>
+            </span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>System Commander</div>
+      <div>Built by <span>Leukode Labs</span></div>
+      <a href="https://github.com/leukode-labs/System-Commander" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </footer>
+
+    <script type="module" src="/script.js"></script>
+  </body>
+</html>
