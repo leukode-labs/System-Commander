@@ -280,6 +280,8 @@ export class SystemCommanderRemoteAgent {
                 ...process.env,
                 DC_REMOTE_DEVICE: 'true',
                 SYSTEM_COMMANDER_REMOTE_AGENT: 'true',
+                SYSTEM_COMMANDER_REMOTE_RELAY_URL: this.relayUrl,
+                SYSTEM_COMMANDER_REMOTE_DEVICE_ID: this.deviceId,
             },
         });
 

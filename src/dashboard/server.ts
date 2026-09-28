@@ -6,6 +6,9 @@ import { monitor } from './monitor.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DASHBOARD_PORT = Number(process.env.SYSTEM_COMMANDER_DASHBOARD_PORT) || 4319;
+const MCP_RELAY_URL = String(process.env.SYSTEM_COMMANDER_REMOTE_RELAY_URL || process.env.SYSTEM_COMMANDER_RELAY_URL || '').replace(/\/$/, '');
+const MCP_DEVICE_ID = String(process.env.SYSTEM_COMMANDER_REMOTE_DEVICE_ID || '');
+const MCP_URL = MCP_RELAY_URL && MCP_DEVICE_ID ? `${MCP_RELAY_URL}/mcp/${encodeURIComponent(MCP_DEVICE_ID)}` : '';
 
 function loadLogoDataUri(filename: string): string {
     try {
@@ -71,6 +74,7 @@ button{font:inherit}
 h1{margin:10px 0 8px;font-size:34px;line-height:1.05;letter-spacing:-.035em}
 .hero-copy{max-width:700px;color:var(--muted);font-size:14px;line-height:1.65}
 .hero-side{text-align:right}.hero-side .big{font-size:26px;font-weight:600;letter-spacing:-.03em}
+.mcp-link-card{margin:-2px 0 18px;padding:14px 16px;border:1px solid rgba(98,214,231,.14);border-radius:14px;background:linear-gradient(180deg,rgba(98,214,231,.055),rgba(13,16,22,.88));display:flex;align-items:center;justify-content:space-between;gap:16px}.mcp-link-copy{min-width:0}.mcp-link-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--cyan);font-weight:700}.mcp-link-url{margin-top:6px;color:var(--text);font:500 11px/1.5 'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mcp-link-sub{margin-top:4px;color:var(--muted);font-size:11px}.mcp-copy{flex:none;border:1px solid rgba(98,214,231,.18);border-radius:9px;background:rgba(98,214,231,.07);color:var(--cyan);padding:8px 11px;font-size:11px;font-weight:600;cursor:pointer}.mcp-copy:hover{background:rgba(98,214,231,.12)}
 .hero-side .sub{margin-top:4px;color:var(--muted);font-size:12px}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .stat{
@@ -161,6 +165,8 @@ tbody tr:not(:last-child) td{border-bottom:1px solid rgba(255,255,255,.04)}
     </div>
   </section>
 
+  ${MCP_URL ? `<section class="mcp-link-card"><div class="mcp-link-copy"><div class="mcp-link-label">Your MCP connection</div><div class="mcp-link-url" id="mcp-link-url">${MCP_URL}</div><div class="mcp-link-sub">Use this device-specific URL when connecting your AI client.</div></div><button class="mcp-copy" id="mcp-copy" type="button">Copy link</button></section>` : ''}
+
   <section class="stats">
     <div class="stat">
       <div class="stat-head"><span>Connected clients</span><span class="tone-green">●</span></div>
@@ -228,6 +234,7 @@ function timeAgo(ts){
   if(s<5)return 'just now'; if(s<60)return s+'s ago'; if(s<3600)return Math.floor(s/60)+'m ago'; return Math.floor(s/3600)+'h ago';
 }
 function tickClock(){ document.getElementById('hero-clock').textContent=new Date().toLocaleTimeString(); }
+document.getElementById('mcp-copy')?.addEventListener('click', async () => { const value=document.getElementById('mcp-link-url')?.textContent || ''; try { await navigator.clipboard.writeText(value); const button=document.getElementById('mcp-copy'); if(button){button.textContent='Copied ✓'; setTimeout(()=>button.textContent='Copy link',1400);} } catch {} });
 function drawBars(events){
   const el=document.getElementById('live-bars');
   const count=Math.min(24, Math.max(12, events.length));
