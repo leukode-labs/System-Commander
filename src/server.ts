@@ -22,7 +22,7 @@ const OS_GUIDANCE = getOSSpecificGuidance(SYSTEM_INFO);
 const DEV_TOOL_GUIDANCE = getDevelopmentToolGuidance(SYSTEM_INFO);
 const PATH_GUIDANCE = `IMPORTANT: ${getPathGuidance(SYSTEM_INFO)} Relative paths may fail as they depend on the current working directory. Tilde paths (~/...) might not work in all contexts. Unless the user explicitly asks for relative paths, use absolute paths.`;
 
-const CMD_PREFIX_DESCRIPTION = `This command can be referenced as "DC: ..." or "use Desktop Commander to ..." in your instructions.`;
+const CMD_PREFIX_DESCRIPTION = `This command can be referenced as "DC: ..." or "use System Commander to ..." in your instructions.`;
 
 import {
     StartProcessArgsSchema,
@@ -78,6 +78,7 @@ import {
 } from './ui/contracts.js';
 import { listUiResources, readUiResource } from './ui/resources.js';
 import { shouldShowMcpUiPreviews } from './utils/mcp-ui-ab-test.js';
+import { monitor } from './dashboard/monitor.js';
 
 // Store startup messages to send after initialization
 const deferredMessages: Array<{ level: string, message: string }> = [];
@@ -97,10 +98,11 @@ deferLog('info', 'Loading server.ts');
 
 export const server = new Server(
     {
-        name: "desktop-commander",
+        name: "system-commander",
         version: VERSION,
     },
     {
+        instructions: 'System Commander gives your AI access to the connected computer for files, processes, terminal work, code editing, and system automation.',
         capabilities: {
             tools: {},
             resources: {},  // Add empty resources capability
@@ -212,9 +214,14 @@ server.setRequestHandler(InitializeRequestSchema, async (request: InitializeRequ
         const clientInfo = request.params?.clientInfo;
         if (clientInfo) {
             await updateCurrentClient(clientInfo);
+            monitor.recordConnect(
+                clientInfo.name || 'unknown',
+                clientInfo.version || 'unknown',
+                isRemoteClientContext(clientInfo.name)
+            );
 
             // Welcome page for new users (A/B test controlled) — all clients except
-            // the Desktop Commander app and remote contexts. Further exclusions are
+            // the System Commander app and remote contexts. Further exclusions are
             // flag-served via welcome_page_excluded_clients (e.g. claude-code, which
             // covers Claude Code and Cowork plugin sessions — both identify as
             // `claude-code` and provide their own onboarding surface).
@@ -265,7 +272,7 @@ server.setRequestHandler(InitializeRequestSchema, async (request: InitializeRequ
                 logging: {},
             },
             serverInfo: {
-                name: "desktop-commander",
+                name: "system-commander",
                 version: VERSION,
             },
         };
@@ -1113,7 +1120,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             {
                 name: "give_feedback_to_desktop_commander",
                 description: `
-                        Open feedback form in browser to provide feedback about Desktop Commander.
+                        Open feedback form in browser to provide feedback about System Commander.
                         
                         IMPORTANT: This tool simply opens the feedback form - no pre-filling available.
                         The user will fill out the form manually in their browser.
@@ -1123,7 +1130,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                         2. No need to ask questions or collect information
                         3. Tool opens form with only usage statistics pre-filled automatically:
                            - tool_call_count: Number of commands they've made
-                           - days_using: How many days they've used Desktop Commander
+                           - days_using: How many days they've used System Commander
                            - platform: Their operating system (Mac/Windows/Linux)
                            - client_id: Analytics identifier
                         
@@ -1131,7 +1138,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                         - Job title and technical comfort level
                         - Company URL for industry context
                         - Other AI tools they use
-                        - Desktop Commander's biggest advantage
+                        - System Commander's biggest advantage
                         - How they typically use it
                         - Recommendation likelihood (0-10)
                         - User study participation interest
@@ -1155,7 +1162,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             {
                 name: "get_prompts",
                 description: `
-                        Retrieve a specific Desktop Commander onboarding prompt by ID and execute it.
+                        Retrieve a specific System Commander onboarding prompt by ID and execute it.
                         
                         SIMPLIFIED ONBOARDING V2: This tool only supports direct prompt retrieval.
                         The onboarding system presents 5 options as a simple numbered list:
@@ -1644,6 +1651,17 @@ async function handleCallToolRequest(request: CallToolRequest): Promise<ServerRe
                 ...telemetryData,
                 duration_ms: Date.now() - startTime,
                 is_error: String(isError),
+            });
+            const attributedClient = currentCallIsRemote
+                ? (currentRemoteClient || { name: 'remote-unknown', version: 'unknown' })
+                : currentClient;
+            monitor.recordToolCall({
+                clientName: attributedClient.name || 'unknown',
+                clientVersion: attributedClient.version || 'unknown',
+                toolName: name,
+                durationMs: Date.now() - startTime,
+                isError,
+                remote: currentCallIsRemote,
             });
         }
     }

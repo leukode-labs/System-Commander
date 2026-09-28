@@ -1,0 +1,36 @@
+{
+  "name": "@leukode-labs/system-commander-relay",
+  "version": "0.2.0",
+  "description": "System Commander Cloud relay for routing MCP requests to connected devices",
+  "type": "module",
+  "main": "dist/server.js",
+  "bin": {
+    "system-commander-relay": "dist/server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node scripts/start-production.mjs",
+    "start:test": "node scripts/start-test.mjs",
+    "dev": "tsx watch src/server.ts",
+    "bootstrap": "node scripts/bootstrap-account.mjs"
+  },
+  "dependencies": {
+    "@clerk/backend": "^3.20.1",
+    "@clerk/express": "^2.1.72",
+    "@modelcontextprotocol/sdk": "^1.25.1",
+    "convex": "^1.46.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "simple-icons": "^16.33.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.11",
+    "@types/ws": "^8.5.11",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4"
+  }
+}

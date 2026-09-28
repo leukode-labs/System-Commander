@@ -441,7 +441,7 @@ export class RemoteChannel {
 
             console.error('\n⚠️  Remote session expired and could not be renewed.');
             console.error('   This device is now offline for remote calls; local tools still work.');
-            console.error('   Restart the terminal running Desktop Commander to reconnect.\n');
+            console.error('   Restart the terminal running System Commander to reconnect.\n');
         } catch (error: any) {
             console.debug(`[DEBUG] handleSignedOut() failed: ${error?.message}`);
         } finally {

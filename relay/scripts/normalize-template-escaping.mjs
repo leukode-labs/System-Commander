@@ -1,0 +1,16 @@
+import fs from "node:fs";
+const p="C:\\Users\\user\\Desktop\\System Commander\\relay\\src\\server.ts";
+let s=fs.readFileSync(p,"utf8");
+const dbl=String.fromCharCode(92)+String.fromCharCode(92)+String.fromCharCode(96);
+const single=String.fromCharCode(92)+String.fromCharCode(96);
+const first=s.indexOf("res.type(\"html\").send("+dbl);
+if(first<0)throw new Error("Opening template marker not found.");
+s=s.slice(0,first)+s.slice(first).replace(dbl,String.fromCharCode(96),1);
+const main=s.indexOf("main.innerHTML="+dbl);
+if(main<0)throw new Error("Inner template marker not found.");
+s=s.slice(0,main)+s.slice(main).replace(dbl,single,1);
+const close=s.indexOf(dbl+";\\n    const style",main);
+if(close<0)throw new Error("Inner closing template marker not found.");
+s=s.slice(0,close)+s.slice(close).replace(dbl,single,1);
+fs.writeFileSync(p,s);
+console.log("Normalized server template escaping.");

@@ -1,5 +1,5 @@
 /**
- * Centralized logging utility for Desktop Commander
+ * Centralized logging utility for System Commander
  * Ensures all logging goes through proper channels based on initialization state
  */
 

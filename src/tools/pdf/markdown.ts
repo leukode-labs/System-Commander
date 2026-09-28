@@ -18,7 +18,7 @@ interface CachedPuppeteerChrome {
 }
 
 /**
- * Get Desktop Commander's private Puppeteer cache directory.
+ * Get System Commander's private Puppeteer cache directory.
  */
 function getPuppeteerCacheDir(): string {
     return join(dirname(CONFIG_FILE), 'puppeteer-cache');

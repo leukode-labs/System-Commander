@@ -70,7 +70,7 @@ export class DesktopCommanderIntegration {
         this.isReady = false;
         this.mcpClient = null;
         this.mcpTransport = null;
-        console.error(` - ❌ Local Desktop Commander MCP went away (${reason}); will restart on next tool call`);
+        console.error(` - ❌ Local System Commander MCP went away (${reason}); will restart on next tool call`);
         void captureRemote('desktop_integration_local_disconnected', { reason });
         this.disconnectHandler?.(reason);
     }
@@ -81,10 +81,10 @@ export class DesktopCommanderIntegration {
 
         if (!config) {
             console.debug('[DEBUG] No MCP config found');
-            throw new Error('Desktop Commander MCP not found. Please install it globally via `npm install -g @wonderwhy-er/desktop-commander` or build the local project.');
+            throw new Error('System Commander MCP not found. Please install it globally via `npm install -g @wonderwhy-er/desktop-commander` or build the local project.');
         }
 
-        console.log(` - ⏳ Connecting to Local Desktop Commander MCP using: ${config.command} ${config.args.join(' ')}`);
+        console.log(` - ⏳ Connecting to Local System Commander MCP using: ${config.command} ${config.args.join(' ')}`);
         console.debug('[DEBUG] MCP config:', JSON.stringify(config, null, 2));
 
         try {
@@ -109,7 +109,7 @@ export class DesktopCommanderIntegration {
                 }
             );
 
-            // Connect to Desktop Commander
+            // Connect to System Commander
             console.debug('[DEBUG] Connecting MCP client to transport');
             // shutdown() sets the flag and tears down what exists; it cannot
             // reach back into a restart already in flight. Without these
@@ -144,7 +144,7 @@ export class DesktopCommanderIntegration {
             // respawns a live child. Real death arrives through onclose, which
             // only fires once the transport has actually closed.
             this.mcpClient.onerror = (err: Error) =>
-                console.error(` - ⚠️  Local Desktop Commander MCP error: ${err?.message ?? String(err)}`);
+                console.error(` - ⚠️  Local System Commander MCP error: ${err?.message ?? String(err)}`);
 
             // Ready means the child has served a request, not that it
             // completed the handshake — one definition, whichever path
@@ -155,11 +155,11 @@ export class DesktopCommanderIntegration {
             this.abortIfShuttingDown();
             this.isReady = true;
 
-            console.log(' - 🔌 Connected to Desktop Commander MCP');
-            console.debug('[DEBUG] Desktop Commander MCP connection successful');
+            console.log(' - 🔌 Connected to System Commander MCP');
+            console.debug('[DEBUG] System Commander MCP connection successful');
 
         } catch (error) {
-            console.error(' - ❌ Failed to start Desktop Commander MCP:', error);
+            console.error(' - ❌ Failed to start System Commander MCP:', error);
             console.debug('[DEBUG] MCP startup error:', error);
             // Leave no half-built child behind, or ensureReady() would treat
             // the corpse as live on the next attempt. Covers a child that
@@ -179,14 +179,14 @@ export class DesktopCommanderIntegration {
     /** Same refusal ensureReady() makes up front, for an attempt already running. */
     private abortIfShuttingDown(): void {
         if (this.isShuttingDown) {
-            throw new Error('Desktop Commander integration is shutting down');
+            throw new Error('System Commander integration is shutting down');
         }
     }
 
     async ensureReady(): Promise<void> {
         if (this.ready) return;
         if (this.isShuttingDown) {
-            throw new Error('Desktop Commander integration is shutting down');
+            throw new Error('System Commander integration is shutting down');
         }
         if (!this.reinitPromise) {
             // A child that crashes on start would otherwise be respawned once
@@ -195,11 +195,11 @@ export class DesktopCommanderIntegration {
             const waitMs = this.nextRestartAt - Date.now();
             if (waitMs > 0) {
                 throw new Error(
-                    `Local Desktop Commander MCP failed to start ${this.restartAttempts} time(s); ` +
+                    `Local System Commander MCP failed to start ${this.restartAttempts} time(s); ` +
                     `next attempt in ${Math.ceil(waitMs / 1000)}s`
                 );
             }
-            console.log(' - ♻️  Local Desktop Commander MCP is not running; restarting it...');
+            console.log(' - ♻️  Local System Commander MCP is not running; restarting it...');
             this.reinitPromise = this.restartChild().finally(() => {
                 this.reinitPromise = null;
             });
@@ -325,7 +325,7 @@ export class DesktopCommanderIntegration {
      * keeps swallowing, because registerDevice() wants a tool list or nothing.
      */
     private async verifyExecution(): Promise<void> {
-        if (!this.mcpClient) throw new Error('Local Desktop Commander MCP is not connected');
+        if (!this.mcpClient) throw new Error('Local System Commander MCP is not connected');
         await this.mcpClient.listTools();
     }
 
@@ -399,6 +399,6 @@ export class DesktopCommanderIntegration {
         }
 
         this.isReady = false;
-        console.debug('[DEBUG] Desktop Commander integration shutdown complete');
+        console.debug('[DEBUG] System Commander integration shutdown complete');
     }
 }

@@ -38,12 +38,13 @@ export async function openBrowser(url: string): Promise<void> {
 }
 
 /**
- * Open the Desktop Commander welcome page
+ * Open the System Commander welcome page
  */
 export async function openWelcomePage(clientName?: string): Promise<void> {
   // utm_source is auto-captured by the welcome page's PostHog (and GA4), so
   // web analytics can segment by MCP client without any web-side changes.
-  const url = 'https://desktopcommander.app/welcome/'
-    + (clientName ? `?utm_source=${encodeURIComponent(clientName)}` : '');
+  const baseUrl = process.env.SYSTEM_COMMANDER_WELCOME_URL;
+  if (!baseUrl) return;
+  const url = baseUrl + (clientName ? `?utm_source=${encodeURIComponent(clientName)}` : '');
   await openBrowser(url);
 }

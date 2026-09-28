@@ -1,11 +1,7 @@
-# Desktop Commander MCP
-### Search, update, manage files and run terminal commands with AI
+# System Commander
+### System Commander — AI control for your computer
 
-[![npm downloads](https://img.shields.io/npm/dw/@wonderwhy-er/desktop-commander)](https://www.npmjs.com/package/@wonderwhy-er/desktop-commander)
-[![AgentAudit Verified](https://agentaudit.dev/api/badge/desktop-commander)](https://agentaudit.dev/skills/desktop-commander)
-[![Trust Score](https://archestra.ai/mcp-catalog/api/badge/quality/wonderwhy-er/DesktopCommanderMCP)](https://archestra.ai/mcp-catalog/wonderwhy-er__desktopcommandermcp)
-[![smithery badge](https://smithery.ai/badge/@wonderwhy-er/desktop-commander)](https://smithery.ai/server/@wonderwhy-er/desktop-commander)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow.svg)](https://www.buymeacoffee.com/wonderwhyer)
+System Commander is an MCP server for terminal operations, files, processes, code editing, and remote computer control. It is built from the MIT-licensed Desktop Commander codebase; upstream attribution is retained in the LICENSE.
 
 
 [![Discord](https://img.shields.io/badge/Join%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/kQ27sNnZr7)
@@ -457,37 +453,37 @@ Or add to `.qwen/settings.json` (project) or `~/.qwen/settings.json` (global). S
 <details>
 <summary><b>ChatGPT / Claude Web (Remote MCP)</b></summary>
 
-Use Desktop Commander from **ChatGPT**, **Claude web**, and other AI services while commands still execute on your computer.
+Use **System Commander Cloud** from **ChatGPT**, **Claude web**, and other MCP clients while commands still execute on the connected computer.
 
-Start the Remote Device:
+Start your System Commander Remote Agent:
 
 ```bash
-npx @wonderwhy-er/desktop-commander@latest remote
+npx @leukode-labs/system-commander@latest remote --relay <your-relay-url> --token <device-token>
 ```
 
-On first run, complete browser authentication, then connect your AI at **[mcp.desktopcommander.app](https://mcp.desktopcommander.app)**.
+The remote agent connects to your System Commander relay over WebSocket. Your AI client connects to the relay's MCP endpoint with the device token.
 
-- Stop the local device temporarily with `Ctrl+C`
-- See available CLI options with `npx @wonderwhy-er/desktop-commander@latest remote --help`
-- See **[Remote MCP setup, logout/revocation, CLI reference, and troubleshooting](src/remote-device/README.md)**
+- Stop the local device with `Ctrl+C`
+- See remote CLI options with `npx @leukode-labs/system-commander@latest remote --help`
+- See **[Remote MCP setup, device authentication, CLI reference, and troubleshooting](src/remote-device/README.md)**
 
 ### Security
 
-- ✅ The Remote Device only accepts commands while it is running
-- ✅ Commands execute locally under your user permissions
-- ✅ Secure OAuth authentication and encrypted communication channel
+- ✅ Device tokens are stored as hashes in the relay database
+- ✅ Commands execute locally under the connected user's permissions
+- ✅ The relay never needs the user's filesystem credentials
 
 </details>
 
-## Updating & Uninstalling Desktop Commander
+## Updating & Uninstalling System Commander
 
-### Automatic Updates (Options 1, 2, 3, 4 & 6)
-**Options 1 (npx), Option 2 (bash installer), 3 (Smithery), 4 (manual config), and 6 (Docker)** automatically update to the latest version whenever you restart Claude. No manual intervention needed.
+### Automatic Updates
+When installed through npm, restart the host application after updating the package.
 
-### Manual Updates (Option 5)
-- **Option 5 (local checkout):** `cd DesktopCommanderMCP && git pull && npm run setup`
+### Manual Updates
+- **Source checkout:** `git pull && npm install && npm run build`
 
-### Uninstalling Desktop Commander
+### Uninstalling System Commander
 #### 🤖 Automatic Uninstallation (Recommended)
 
 The easiest way to completely remove Desktop Commander:

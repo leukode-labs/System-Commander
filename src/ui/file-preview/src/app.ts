@@ -465,7 +465,7 @@ export function bootstrapApp(): void {
     conflictDialogController = createConflictDialogController({ container: document });
 
     const app = new App(
-        { name: 'Desktop Commander File Preview', version: '1.0.0' },
+        { name: 'System Commander File Preview', version: '1.0.0' },
         { updateModelContext: { text: {} } },
         { autoResize: true },
     );

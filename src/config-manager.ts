@@ -375,7 +375,7 @@ class ConfigManager {
   /**
    * Atomically update one value without blocking the caller on persistence.
    * The updater is replayed against the latest disk value under the lock, which
-   * makes counter-style updates safe across multiple Desktop Commander processes.
+   * makes counter-style updates safe across multiple System Commander processes.
    */
   async updateValueNonBlocking(key: string, updater: (current: any) => any): Promise<any> {
     await this.init();

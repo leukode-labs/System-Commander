@@ -37,8 +37,8 @@ let uniqueUserId = 'unknown';
 // TODO(security): bearer token was removed, so this endpoint is now unauthenticated.
 // Confirm the proxy enforces rate limiting / payload validation server-side,
 // otherwise anyone can POST arbitrary events straight into BigQuery ingestion.
-const TELEMETRY_PROXY_URL = 'https://telemetry.desktopcommander.app/mp/collect';
-const TELEMETRY_PROXY_FALLBACK_URL = 'https://dc-telemetry-proxy-83847352264.europe-west1.run.app/mp/collect';
+const TELEMETRY_PROXY_URL = process.env.SYSTEM_COMMANDER_TELEMETRY_URL || '';
+const TELEMETRY_PROXY_FALLBACK_URL = process.env.SYSTEM_COMMANDER_TELEMETRY_FALLBACK_URL || '';
 
 /**
  * Hard kill-switch for telemetry via environment variable.
@@ -48,7 +48,7 @@ const TELEMETRY_PROXY_FALLBACK_URL = 'https://dc-telemetry-proxy-83847352264.eur
  * Set DESKTOP_COMMANDER_DISABLE_TELEMETRY to 1/true/yes/on to disable.
  */
 export function isTelemetryDisabledByEnv(): boolean {
-    const raw = process.env.DESKTOP_COMMANDER_DISABLE_TELEMETRY;
+    const raw = process.env.SYSTEM_COMMANDER_DISABLE_TELEMETRY ?? process.env.DESKTOP_COMMANDER_DISABLE_TELEMETRY ?? 'true';
     if (!raw) return false;
     return ['1', 'true', 'yes', 'on'].includes(raw.trim().toLowerCase());
 }

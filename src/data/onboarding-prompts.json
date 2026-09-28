@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "description": "Desktop Commander onboarding prompts - V2 simplified (5 prompts only)",
+  "description": "System Commander onboarding prompts - V2 simplified (5 prompts only)",
   "prompts": [
     {
       "id": "onb2_01",

@@ -261,7 +261,7 @@ export class MCPDevice {
                 console.log('   - Retrying in the background; commands start working once you see "✅ Channel subscribed".');
             } else {
                 console.log('');
-                console.log('✅ Desktop Commander Remote is connected');
+                console.log('✅ System Commander Remote is connected');
                 console.log('');
                 console.log(`   Device: ${deviceName}`);
                 console.log('   Status: Online');
@@ -438,7 +438,7 @@ export class MCPDevice {
     // Methods moved to RemoteChannel
 
     /**
-     * The local Desktop Commander child died. A healthy remote channel says
+     * The local System Commander child died. A healthy remote channel says
      * nothing about the local half being alive, so without this the device kept
      * reporting itself online and every routed tool call came back "Not
      * connected" until someone restarted the process by hand.
@@ -468,10 +468,10 @@ export class MCPDevice {
                 // nothing about the channel. Let the predicate decide, or this
                 // repeats the one-sided claim this whole change removes.
                 this.remoteChannel.syncReachabilityStatus();
-                console.log('♻️  Local Desktop Commander MCP restarted; device is online again');
+                console.log('♻️  Local System Commander MCP restarted; device is online again');
                 return;
             } catch (error: any) {
-                console.error(`❌ Could not restart local Desktop Commander MCP: ${error.message}`);
+                console.error(`❌ Could not restart local System Commander MCP: ${error.message}`);
                 // Once per outage, not once per attempt: a device that never
                 // recovers would otherwise emit this every backoff window for
                 // as long as it runs.

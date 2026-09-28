@@ -1,3 +1,7 @@
+# Local browser/test state
+.headless-sc/
+relay/tmp-*.mjs
+
 # Dependencies
 node_modules/
 npm-debug.log*

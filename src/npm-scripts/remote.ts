@@ -1,96 +1,110 @@
-import { MCPDevice, getRemoteDeviceConfigPath } from '../remote-device/device.js';
-import fs from 'fs/promises';
-import os from 'os';
-import { captureRemote } from '../utils/capture.js';
+import { RemoteAgentError, SystemCommanderRemoteAgent } from '../remote-device/system-commander-agent.js';
+import { VERSION } from '../version.js';
 
-const BLUE = '\x1b[34m';
 const RESET = '\x1b[0m';
+const ACCENT = '\x1b[38;5;75m';
+const MUTED = '\x1b[38;5;245m';
+const WHITE = '\x1b[97m';
+const RED = '\x1b[91m';
+function setTerminalTitle(title = 'SYSTEM COMMANDER') {
+    process.title = title;
+    if (process.stdout.isTTY) {
+        process.stdout.write('\\x1b]0;' + title + '\\x07');
+    }
+}
 
-function printRemoteHeader() {
+function printRemoteHeader(version: string) {
+    setTerminalTitle('SYSTEM COMMANDER');
+
     console.log();
-    console.log(`${BLUE}██████╗ ███████╗███████╗██╗  ██╗████████╗ ██████╗ ██████╗     ██████╗ ██████╗ ███╗   ███╗███╗   ███╗ █████╗ ███╗   ██╗██████╗ ███████╗██████╗${RESET}`);
-    console.log(`${BLUE}██╔══██╗██╔════╝██╔════╝██║ ██╔╝╚══██╔══╝██╔═══██╗██╔══██╗   ██╔════╝██╔═══██╗████╗ ████║████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔════╝██╔══██╗${RESET}`);
-    console.log(`${BLUE}██║  ██║█████╗  ███████╗█████╔╝    ██║   ██║   ██║██████╔╝   ██║     ██║   ██║██╔████╔██║██╔████╔██║███████║██╔██╗ ██║██║  ██║█████╗  ██████╔╝${RESET}`);
-    console.log(`${BLUE}██║  ██║██╔══╝  ╚════██║██╔═██╗    ██║   ██║   ██║██╔═══╝    ██║     ██║   ██║██║╚██╔╝██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗${RESET}`);
-    console.log(`${BLUE}██████╔╝███████╗███████║██║  ██╗   ██║   ╚██████╔╝██║        ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║██████╔╝███████╗██║  ██║${RESET}`);
-    console.log(`${BLUE}╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝         ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝${RESET}`);
-    console.log();
-    console.log(`${BLUE}🌐 Remote Connection${RESET}`);
+    console.log(WHITE + 'System Commander' + RESET + MUTED + '  ' + version + RESET);
+    console.log(MUTED + 'Remote device setup' + RESET);
+    console.log(ACCENT + '────────────────────────────────────────────────────────' + RESET);
     console.log();
 }
 
+function printRemoteStatus(icon: string, label: string, value?: string, color = WHITE) {
+    const suffix = value ? MUTED + '  ' + RESET + color + value + RESET : '';
+    console.log('  ' + icon + '  ' + WHITE + label + RESET + suffix);
+}
+
+function getOption(name: string): string | undefined {
+    const index = process.argv.indexOf(name);
+    if (index === -1) return undefined;
+    return process.argv[index + 1];
+}
+
 export async function runRemote() {
-    if (process.argv.includes('--help') || process.argv.includes('-h')) {
-        console.log(`Desktop Commander Remote MCP device
+    const args = process.argv.slice(2);
+    const help = args.includes('--help') || args.includes('-h');
 
-Usage:
-  desktop-commander remote [options]
+    setTerminalTitle('SYSTEM COMMANDER');
 
-Options:
-  --logout              Remove saved local Remote MCP credentials and exit
-  --no-persist-session  Do not reuse or save authentication for this run
-  --disable-no-sleep    Do not prevent sleep while the remote device is running
-  --debug                Enable verbose debug logging
-  -h, --help             Show this help
-
-Examples:
-  npx @wonderwhy-er/desktop-commander@latest remote
-  npx @wonderwhy-er/desktop-commander@latest remote --debug
-  npx @wonderwhy-er/desktop-commander@latest remote --logout
-
-Note:
-  --logout removes local credentials only. Revoke the device in the Remote MCP
-  dashboard if you also want to invalidate its server-side authorization.`);
+    if (help) {
+        printRemoteHeader(VERSION);
+        console.log('System Commander Remote Agent');
+        console.log('');
+        console.log('Usage:');
+        console.log('  system-commander remote [options]');        console.log('');
+        console.log('Options:');
+        console.log('  --relay <url>         System Commander Cloud relay URL');
+        console.log('  --device-id <id>      Device identifier');
+        console.log('  --token <token>       Device authentication token');
+        console.log('  --logout              Remove saved device credentials');
+        console.log('  --no-persist-session  Do not save the device token locally');
+        console.log('  --debug               Enable verbose diagnostics');
+        console.log('  -h, --help            Show this help');
+        console.log('');
+        console.log('Environment variables:');
+        console.log('  SYSTEM_COMMANDER_RELAY_URL');
+        console.log('  SYSTEM_COMMANDER_DEVICE_ID');
+        console.log('  SYSTEM_COMMANDER_DEVICE_TOKEN');
         return;
     }
-    if (process.argv.includes('--logout')) {
-        const configPath = getRemoteDeviceConfigPath();
-        try {
-            await fs.rm(configPath, { force: true });
-            console.log('🔓 Logged out locally. Saved Remote MCP device credentials were removed.');
-            console.log(`   ${configPath}`);
-        } catch (error: any) {
-            console.error('❌ Failed to remove saved Remote MCP credentials:', error.message);
-            process.exitCode = 1;
-        }
-        return;
-    }
-    printRemoteHeader();
 
-    // --persist-session is kept as an accepted no-op so existing invocations
-    // and docs keep working; --no-persist-session opts back out.
-    const persistSession = !process.argv.includes('--no-persist-session');
-    if (!persistSession) {
-        console.log('🔓 Session persistence disabled — re-authorization required on every start');
-    }
-    const disableNoSleep = process.argv.includes('--disable-no-sleep');
-    const verbose = process.argv.includes('--debug');
-    console.debug('[DEBUG] Verbose mode: ', verbose);
-    // Override console.debug based on verbose flag
-    // When --debug is not provided, console.debug becomes a no-op
-    if (!verbose) {
-        console.debug = () => { };
-    }
+    const relayUrl = getOption('--relay');
+    const deviceId = getOption('--device-id');
+    const token = getOption('--token');
+    const persistSession = !args.includes('--no-persist-session');
+    const debug = args.includes('--debug');
 
-    console.debug('[DEBUG] Platform:', os.platform());
-    await captureRemote('remote_device_command_started', {
-        node_version: process.version,
-        persist_session: persistSession,
+    const agent = new SystemCommanderRemoteAgent({
+        relayUrl,
+        deviceId,
+        token,
+        persistSession,        debug,
     });
 
-    // Start caffeinate on macOS (unless disabled)
-    // Caffeinate will monitor this process and automatically exit when it terminates
-    if (!disableNoSleep && os.platform() === 'darwin') {
-        try {
-            console.debug('[DEBUG] Start caffeinate', process.pid);
-            const { default: caffeinate } = await import('caffeinate');
-            caffeinate({ pid: process.pid });
-            console.log('☕ No sleep mode enabled');
-        } catch (error) {
-            console.warn('⚠️ Failed to start caffeinate:', error);
-        }
+    if (args.includes('--logout')) {
+        await agent.logout();
+        return;
     }
 
-    const device = new MCPDevice({ persistSession });
-    await device.start();
+    printRemoteHeader(VERSION);
+    printRemoteStatus('·', 'Preparing secure device bridge');
+    printRemoteStatus('·', 'Device', deviceId || 'saved configuration', WHITE);
+    printRemoteStatus('·', 'Relay', relayUrl || 'saved configuration', ACCENT);
+    console.log();
+
+    try {
+        await agent.run();
+    } catch (error: any) {
+        console.error('');
+        console.error(RED + '✕  System Commander could not start the remote device.' + RESET);
+        console.error('');
+
+        if (error instanceof RemoteAgentError) {
+            console.error(WHITE + '   Problem' + RESET + MUTED + '  ' + RESET + error.message);
+            console.error(WHITE + '   Action' + RESET + MUTED + '   ' + RESET + error.action);
+            console.error(MUTED + '   Code' + RESET + '     ' + error.code);
+        } else {
+            console.error(WHITE + '   Problem' + RESET + MUTED + '  ' + RESET + (error?.message || String(error)));
+            console.error(WHITE + '   Action' + RESET + MUTED + '   ' + RESET + 'Run with --debug for diagnostics and check your System Commander Cloud device command.');
+        }
+
+        console.error('');
+        console.error(MUTED + '   Tip: Never manually edit or reuse an old device token. Generate a fresh command in System Commander Cloud when pairing a device.' + RESET);
+        console.error('');
+        process.exitCode = 1;
+    }
 }

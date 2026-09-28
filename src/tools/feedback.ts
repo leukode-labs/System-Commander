@@ -51,7 +51,7 @@ export async function giveFeedbackToDesktopCommander(params: FeedbackParams = {}
         content: [{
           type: "text",
           text: `🎉 **Feedback form opened in your browser!**\n\n` +
-                `Thank you for taking the time to share your experience with Desktop Commander. ` +
+                `Thank you for taking the time to share your experience with System Commander. ` +
                 `Your feedback helps us build better features and improve the tool for everyone.\n\n` +
                 `The form has been pre-filled with the information you provided. ` +
                 `You can modify or add any additional details before submitting.\n\n` +

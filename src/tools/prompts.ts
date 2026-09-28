@@ -219,7 +219,7 @@ async function getPrompt(promptId: string, anonymousUseCase?: string): Promise<S
  */
 function getCategoryDescription(category: string): string {
   const descriptions: Record<string, string> = {
-    'onboarding': 'Curated prompts perfect for first-time Desktop Commander users',
+    'onboarding': 'Curated prompts perfect for first-time System Commander users',
     'Analyze data': 'Data analysis, visualization, and insights generation',
     'Build features and products': 'Full-stack development and application building',
     'Explore codebase': 'Code analysis, documentation, and understanding',
@@ -232,7 +232,7 @@ function getCategoryDescription(category: string): string {
     'Design systems': 'Architecture planning and system design'
   };
   
-  return descriptions[category] || 'Desktop Commander prompts and workflows';
+  return descriptions[category] || 'System Commander prompts and workflows';
 }
 
 /**
@@ -242,7 +242,7 @@ function formatCategoriesResponse(categories: Array<{name: string, count: number
   const sortedCategories = categories.sort((a, b) => b.count - a.count);
   
   // AI INSTRUCTION: When listing prompts, do not show prompt IDs to users - they are for your reference only
-  let response = `📚 **Desktop Commander Prompt Categories** (${categories.length} categories, ${totalPrompts} prompts)\n\n`;
+  let response = `📚 **System Commander Prompt Categories** (${categories.length} categories, ${totalPrompts} prompts)\n\n`;
   
   sortedCategories.forEach(cat => {
     response += `• **${cat.name}** (${cat.count} prompts) - ${cat.description}\n`;
@@ -262,7 +262,7 @@ function formatCategoriesResponse(categories: Array<{name: string, count: number
 function formatPromptsListResponse(prompts: Prompt[], category?: string): string {
   const categoryText = category ? ` in "${category}"` : '';
   
-  let response = `Desktop Commander Examples${categoryText}\n\n`;
+  let response = `System Commander Examples${categoryText}\n\n`;
   
   // Group by secondary tag
   const groupedPrompts = new Map<string, Prompt[]>();

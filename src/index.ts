@@ -14,6 +14,7 @@ import { capture } from './utils/capture.js';
 import { logToStderr, logger } from './utils/logger.js';
 import { runRemote } from './npm-scripts/remote.js';
 import { ensureChromeAvailable } from './tools/pdf/markdown.js';
+import { startDashboardServer } from './dashboard/server.js';
 
 // Store messages to defer until after initialization
 const deferredMessages: Array<{ level: string, message: string }> = [];
@@ -111,6 +112,22 @@ async function runServer() {
     });
 
     capture('run_server_start');
+
+    // Live monitor dashboard — shows connected MCP clients and recent tool
+    // calls at http://localhost:4319 (configurable via
+    // SYSTEM_COMMANDER_DASHBOARD_PORT). Opens a browser tab on startup unless
+    // disabled. Runs alongside the stdio MCP transport; failures here must
+    // never take down the actual MCP server.
+    if (!process.argv.includes('--no-dashboard')) {
+      try {
+        // Remote agent opens the live dashboard after cloud registration so
+        // the user gets one browser tab at the right moment.
+        const openDashboard = process.env.SYSTEM_COMMANDER_REMOTE_AGENT !== 'true';
+        startDashboardServer(openDashboard);
+      } catch (dashboardError) {
+        deferLog('warning', `Dashboard server failed to start: ${dashboardError instanceof Error ? dashboardError.message : String(dashboardError)}`);
+      }
+    }
 
     deferLog('info', 'Connecting server...');
 

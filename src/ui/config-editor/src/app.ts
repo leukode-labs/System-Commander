@@ -593,11 +593,11 @@ function render(container: HTMLElement, controller: ReturnType<typeof createConf
 
     container.innerHTML = `
       <main id="tool-shell" class="${shellClasses}">
-        ${renderCompactRow({ id: 'compact-toggle', label: 'View config', filename: 'Desktop Commander', variant: 'ready', expandable: true, expanded: chrome.expanded, interactive: true })}
+        ${renderCompactRow({ id: 'compact-toggle', label: 'View config', filename: 'System Commander', variant: 'ready', expandable: true, expanded: chrome.expanded, interactive: true })}
 
         <section class="panel config-card">
           <div class="panel-content-wrapper">
-            <div class="settings-stack" aria-label="Desktop Commander settings">${settingsHtml}</div>
+            <div class="settings-stack" aria-label="System Commander settings">${settingsHtml}</div>
           </div>
         </section>
 
@@ -903,7 +903,7 @@ export function bootstrapConfigEditorApp(): void {
     scheduleRender();
 
     const app = new App(
-        { name: 'Desktop Commander Config Editor', version: '1.0.0' },
+        { name: 'System Commander Config Editor', version: '1.0.0' },
         {},
         { autoResize: true },
     );
