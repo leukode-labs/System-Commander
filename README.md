@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./logo.png" alt="System Commander" width="150" />
+<img src="./src/dashboard/assets/logo.png" alt="System Commander" width="150" />
 
 # System Commander
 
